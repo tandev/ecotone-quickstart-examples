@@ -18,12 +18,14 @@ final class PersonService
     }
 
     #[QueryHandler('person.getAllRegistered')]
-    public function getAllRegisteredPersonIds(
+    public function getAllRegisteredPerson(
         #[Reference] MultiTenantConnectionFactory $connectionFactory
-    ): array
+    ): iterable
     {
-        return $connectionFactory->getConnection()->executeQuery(<<<SQL
-    SELECT person_id FROM persons;
-SQL)->fetchFirstColumn();
+        yield from $connectionFactory->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from('persons')
+            ->executeQuery()
+            ->iterateAssociative();
     }
 }
