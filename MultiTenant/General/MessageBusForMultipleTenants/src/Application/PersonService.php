@@ -22,7 +22,7 @@ final class PersonService
         #[Reference] MultiTenantConnectionFactory $connectionFactory
     ): iterable
     {
-        yield from $connectionFactory->getConnection()->createQueryBuilder()
+        return $connectionFactory->getConnection()->createQueryBuilder()
             ->select('*')
             ->from('persons')
             ->executeQuery()
